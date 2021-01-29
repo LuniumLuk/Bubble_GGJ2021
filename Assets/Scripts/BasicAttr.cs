@@ -10,18 +10,30 @@ public class BasicAttr : MonoBehaviour
     public Vector3 spd;
     public Vector3 acc;
     public float Ressistance = 0.001f;
+    public float CRessistance = 0.01f;
+    public bool applyRessistance = false;
 
     private void Start()
     {
-        if(id >= 0)
+        if (id >= 0)
             id = sequence++;
         transform.localScale = Vector3.one * Mathf.Sqrt(mass);
     }
     private void FixedUpdate()
     {
+        Vector3 RForce = CRessistance * Mathf.Sqrt(mass) * spd.magnitude * spd.magnitude * -spd.normalized;
+        if(applyRessistance)
+            acc = RForce;
         spd += acc * Time.fixedDeltaTime;
         transform.position += spd * Time.fixedDeltaTime;
-        CheckBoundary();
+        Vector3 currentPos = transform.position;
+        currentPos.z = -10;
+        if (id == 0)
+        {
+            Camera.main.transform.position = currentPos;
+            Camera.main.orthographicSize = Mathf.Sqrt(mass) / 2;
+        }
+        //CheckBoundary();
     }
 
     void CheckBoundary()
