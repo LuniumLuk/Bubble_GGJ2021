@@ -131,9 +131,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1149355218}
   - component: {fileID: 1149355217}
-  - component: {fileID: 1149355216}
   - component: {fileID: 1149355219}
   - component: {fileID: 1149355220}
+  - component: {fileID: 1149355221}
+  - component: {fileID: 1149355216}
+  - component: {fileID: 1149355223}
   m_Layer: 0
   m_Name: New Sprite
   m_TagString: Untagged
@@ -150,17 +152,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1149355215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1322b5f4978789d4c9cca3304d2500c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8db1d860017aa134ebd12775de7322d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  scale: 100
-  speed: {x: 0, y: 0, z: 0}
-  accelerate: {x: 0, y: 0, z: 0}
-  Cdrag: 0.001
-  dragging: 0
-  newly: 0
-  applyDrag: 0
+  thrustForce: 100
 --- !u!212 &1149355217
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -262,6 +257,36 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1149355221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149355215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cabcf516063b30439c8b07b976a54df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
+  mass: 10
+  spd: {x: 0, y: 0, z: 0}
+  acc: {x: 0, y: 0, z: 0}
+  Ressistance: 0.31
+--- !u!114 &1149355223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149355215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5d1984df7b8754f9829857398af044, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dragging: 0
 --- !u!1 &1785433946
 GameObject:
   m_ObjectHideFlags: 0

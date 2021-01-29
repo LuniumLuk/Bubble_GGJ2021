@@ -13,7 +13,8 @@ public class BasicAttr : MonoBehaviour
 
     private void Start()
     {
-        id = sequence++;
+        if(id >= 0)
+            id = sequence++;
         transform.localScale = Vector3.one * Mathf.Sqrt(mass);
     }
     private void FixedUpdate()
