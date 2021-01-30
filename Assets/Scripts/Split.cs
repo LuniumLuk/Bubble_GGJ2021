@@ -15,6 +15,10 @@ public class Split : MonoBehaviour
     // 用于指示方向的三角形，之后可以改成力度条或者其他贴图
     public Transform pointer = null;
 
+    public float del = 1f;
+
+    public Sprite spriteChild = null;
+
     // 用于处理融合的临时gameObject
     private GameObject tempObject = null;
     private void Awake()
@@ -29,23 +33,38 @@ public class Split : MonoBehaviour
         // 如果存在一个tempObject，进行融合处理
         if (tempObject)
         {
-            Debug.LogWarning("trigger");
+            Debug.LogWarning("colide and trgiger");
             float otherMass = tempObject.GetComponent<BasicAttr>().mass;
             Vector3 otherspeed = tempObject.GetComponent<BasicAttr>().speed;
             transform.position = (transform.position * attr.mass + tempObject.transform.position * otherMass) / (attr.mass + otherMass);
-            Destroy(tempObject);
+            // Destroy(tempObject);
             attr.speed = (attr.speed * attr.mass + otherspeed * otherMass) / (attr.mass + otherMass);
-            attr.mass += otherMass;
-            transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
+
+            attr.targetmass = attr.mass + otherMass;
+            tempObject.GetComponent<BasicAttr>().targetmass = 0;
+            //attr.mass += otherMass;
+            //transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             tempObject = null;
         }
+        if(!dragging) {
+            if(Mathf.Abs(attr.mass - attr.targetmass) > del)
+            {
+                attr.mass += Mathf.Sign(attr.targetmass - attr.mass) * del;
+                transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
+            }
+            else if(attr.targetmass == 0) {
+                Destroy(gameObject);
+            }
+        }
+
+
 
     }
 
     private void Update()
     {
         // 物体为主物体且不出在拖动状态且右键按下
-        if (attr.id == 0 && !dragging && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
+        if (!tempObject && attr.id == 0 && !dragging && !newObject && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
         {
             dragging = true;
             Transform targetTransform = transform;
@@ -63,10 +82,10 @@ public class Split : MonoBehaviour
             newObject.transform.localScale = Vector3.one * Settings.scaleC;
             newObject.GetComponent<BasicAttr>().mass = 1;
             newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
-            newObject.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0);
+            newObject.GetComponent<SpriteRenderer>().sprite = spriteChild;
         }
         // 如果为主物体且正在右键拖动中
-        if (attr.id == 0 && newObject && dragging)
+        else if (attr.id == 0 && newObject && dragging)
         {
             // 右键按下
             if (Input.GetMouseButton(1))
@@ -93,12 +112,24 @@ public class Split : MonoBehaviour
                 // 发射分裂体
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
+                attr.targetmass = attr.mass;
                 attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
                 newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
+                newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
-                dragging = false;
                 pointer.gameObject.SetActive(false);
             }
+        }
+        else if(newObject && !dragging) {
+                            // 发射分裂体
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.z = 0;
+                attr.targetmass = attr.mass;
+                attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
+                newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
+                newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
+                newObject = null;
+                pointer.gameObject.SetActive(false);
         }
     }
 
@@ -108,6 +139,19 @@ public class Split : MonoBehaviour
         if (!tempObject && attr.id == 0 && !dragging && other.gameObject.tag == "bubble")
         {
             tempObject = other.gameObject;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "bubble" && dragging)
+        {
+            Debug.LogWarning("trigger appear");
+            dragging = false;
+        }
+        if (other.gameObject.tag == "bubble" && attr.id == 0 && dragging)
+        {
+            dragging = false;
         }
     }
 
