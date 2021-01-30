@@ -7106,6 +7106,31 @@ PrefabInstance:
       propertyPath: ColorModule.gradient.maxGradient.key1.b
       value: 0.48627448
       objectReference: {fileID: 0}
+    - target: {fileID: 4654059437847569637, guid: 6519f0c76b8bdab40a2f7c70482db540,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654059437847569637, guid: 6519f0c76b8bdab40a2f7c70482db540,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654059437847569637, guid: 6519f0c76b8bdab40a2f7c70482db540,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654059437847569637, guid: 6519f0c76b8bdab40a2f7c70482db540,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4654059437847569637, guid: 6519f0c76b8bdab40a2f7c70482db540,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4654059437778056522, guid: 6519f0c76b8bdab40a2f7c70482db540, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6519f0c76b8bdab40a2f7c70482db540, type: 3}
