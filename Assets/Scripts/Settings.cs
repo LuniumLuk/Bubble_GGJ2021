@@ -34,4 +34,7 @@ public class Settings
 
     // 燃料箱提供燃油数量
     public static float gasTank = 20f;
+
+    // 开启分裂能力
+    public static bool splitAbility = false;
 }

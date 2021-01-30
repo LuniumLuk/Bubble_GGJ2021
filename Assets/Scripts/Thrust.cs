@@ -23,34 +23,38 @@ public class Thrust : MonoBehaviour
   private void Awake()
   {
     attr = GetComponent<BasicAttr>();
-    gas = Settings.gas;
-    gasText.text = "Gas: " + 100 + '%';
+            gas = Settings.gas;
+
     //rectTransform = GetComponent<RectTransform>();
     //width = rectTransform.sizeDelta.x;
   }
 
   private void Update()
   {
-    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    mousePos.z = 0;
-    transform.localEulerAngles = new Vector3(0, 0, 90f - getAngle(transform.position - mousePos));
-    // 鼠标左键点击
-    if (Input.GetMouseButton(0) && attr.id == 0 && gas > 0)
-    {
+    if (attr.id == 0)
+     {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            transform.localEulerAngles = new Vector3(0, 0, 90f - getAngle(transform.position - mousePos));
+            // 鼠标左键点击
+            if (Input.GetMouseButton(0) && gas > 0)
+            {
 
-      attr.speed += (transform.position - mousePos).normalized * Settings.thrustForce * Time.deltaTime;
-      //emission.transform.localEulerAngles = new Vector3(getAngle(transform.position - mousePos), 90f, 90f);
+                attr.speed += (transform.position - mousePos).normalized * Settings.thrustForce * Time.deltaTime;
+                //emission.transform.localEulerAngles = new Vector3(getAngle(transform.position - mousePos), 90f, 90f);
 
-      gas -= Time.deltaTime * Settings.gasConsume;
-      // 更新UI文字
-      gasText.text = "Gas: " + ((int)gas).ToString() + '%';
-      //更新血条数值
-      addgas = gas;
-      emission.Emit(1);
+                gas -= Time.deltaTime * Settings.gasConsume;
+                // 更新UI文字
+                gasText.text = "Gas: " + ((int)gas).ToString() + '%';
+                //更新血条数值
+                addgas = gas;
+                emission.Emit(1);
+            }
+
+            //public static float gas1 = 1000f;
+        }
+
     }
-
-    //public static float gas1 = 1000f;
-  }
 
   private float getAngle(Vector3 direction)
   {

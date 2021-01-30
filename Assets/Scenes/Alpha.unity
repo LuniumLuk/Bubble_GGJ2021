@@ -739,6 +739,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ebf9120c8f1f049a3f2549869d4ced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 2006252525}
+  D3: {fileID: 1876735943718166440, guid: babbed07741318d459ab3db17085200c, type: 3}
   ProgressText: {fileID: 597826262}
 --- !u!1 &597826260
 GameObject:
@@ -6154,7 +6156,7 @@ SpriteShapeRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -6927,7 +6929,8 @@ PlayableDirector:
   - key: {fileID: -6764859681168580145, guid: dd24eb5523d36f745adf35565c9fca9e, type: 2}
     value: {fileID: 1785433950}
   m_ExposedReferences:
-    m_References: []
+    m_References:
+    - 81962fe99dc309e4db6808f391b9f7c8: {fileID: 735464598}
 --- !u!4 &1700539719
 Transform:
   m_ObjectHideFlags: 0
