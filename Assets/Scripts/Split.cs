@@ -46,13 +46,15 @@ public class Split : MonoBehaviour
             //transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             tempObject = null;
         }
-        if(!dragging) {
-            if(Mathf.Abs(attr.mass - attr.targetmass) > del)
+        if (!dragging)
+        {
+            if (Mathf.Abs(attr.mass - attr.targetmass) > del)
             {
                 attr.mass += Mathf.Sign(attr.targetmass - attr.mass) * del;
                 transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             }
-            else if(attr.targetmass == 0) {
+            else if (attr.targetmass == 0)
+            {
                 Destroy(gameObject);
             }
         }
@@ -109,6 +111,9 @@ public class Split : MonoBehaviour
             }
             else
             {
+                //分裂声音
+                AudioManager.instance.ruptureAudio.Play();
+
                 // 发射分裂体
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
@@ -118,18 +123,24 @@ public class Split : MonoBehaviour
                 newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
                 pointer.gameObject.SetActive(false);
+
             }
         }
-        else if(newObject && !dragging) {
-                            // 发射分裂体
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mousePos.z = 0;
-                attr.targetmass = attr.mass;
-                attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
-                newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
-                newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
-                newObject = null;
-                pointer.gameObject.SetActive(false);
+        else if (newObject && !dragging)
+        {
+            //分裂声音
+            AudioManager.instance.ruptureAudio.Play();
+
+            // 发射分裂体
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            attr.targetmass = attr.mass;
+            attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
+            newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
+            newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
+            newObject = null;
+            pointer.gameObject.SetActive(false);
+
         }
     }
 
