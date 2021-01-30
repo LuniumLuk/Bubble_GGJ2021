@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -89,5 +90,10 @@ public class GameManager : MonoBehaviour
             }
             ProgressText.text = progress2.ToString() + " / 9";
         }
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene(0);
     }
 }

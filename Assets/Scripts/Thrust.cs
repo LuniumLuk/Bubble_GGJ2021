@@ -28,19 +28,21 @@ public class Thrust : MonoBehaviour
 
         //rectTransform = GetComponent<RectTransform>();
         //width = rectTransform.sizeDelta.x;
+        
     }
+
 
     private void Update()
     {
         if (attr.id == 0)
         {
+            Debug.Log("111");
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
             transform.localEulerAngles = new Vector3(0, 0, 90f - getAngle(transform.position - mousePos));
             // 鼠标左键点击
             if (Input.GetMouseButton(0) && gas > 0)
             {
-
                 attr.speed += (transform.position - mousePos).normalized * Settings.thrustForce * Time.deltaTime;
                 //emission.transform.localEulerAngles = new Vector3(getAngle(transform.position - mousePos), 90f, 90f);
 
