@@ -160,12 +160,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 713582179076700419528e17aac3f85b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b71b003cde38d8046860072221fe0250, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.2, y: 1}
+  m_Size: {x: 1, y: 0.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -184,9 +184,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.015268683}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.3354367
 --- !u!50 &5213045198308977452
 Rigidbody2D:
   serializedVersion: 4
@@ -277,9 +277,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.01696539}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.33713293
 --- !u!1 &5213045198378433158
 GameObject:
   m_ObjectHideFlags: 0
