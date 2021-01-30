@@ -23,7 +23,26 @@ public class Split : MonoBehaviour
         pointer.gameObject.SetActive(false);
     }
 
-    private void OnMouseOver()
+
+    private void FixedUpdate()
+    {
+        // 如果存在一个tempObject，进行融合处理
+        if (tempObject)
+        {
+            Debug.LogWarning("trigger");
+            float otherMass = tempObject.GetComponent<BasicAttr>().mass;
+            Vector3 otherspeed = tempObject.GetComponent<BasicAttr>().speed;
+            transform.position = (transform.position * attr.mass + tempObject.transform.position * otherMass) / (attr.mass + otherMass);
+            Destroy(tempObject);
+            attr.speed = (attr.speed * attr.mass + otherspeed * otherMass) / (attr.mass + otherMass);
+            attr.mass += otherMass;
+            transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
+            tempObject = null;
+        }
+
+    }
+
+    private void Update()
     {
         // 物体为主物体且不出在拖动状态且右键按下
         if (attr.id == 0 && !dragging && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
@@ -46,28 +65,6 @@ public class Split : MonoBehaviour
             newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
             newObject.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0);
         }
-    }
-
-    private void FixedUpdate()
-    {
-        // 如果存在一个tempObject，进行融合处理
-        if (tempObject)
-        {
-            Debug.LogWarning("trigger");
-            float otherMass = tempObject.GetComponent<BasicAttr>().mass;
-            Vector3 otherspeed = tempObject.GetComponent<BasicAttr>().speed;
-            transform.position = (transform.position * attr.mass + tempObject.transform.position * otherMass) / (attr.mass + otherMass);
-            Destroy(tempObject);
-            attr.speed = (attr.speed * attr.mass + otherspeed * otherMass) / (attr.mass + otherMass);
-            attr.mass += otherMass;
-            transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
-            tempObject = null;
-        }
-
-    }
-
-    private void Update()
-    {
         // 如果为主物体且正在右键拖动中
         if (attr.id == 0 && newObject && dragging)
         {
