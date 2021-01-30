@@ -27,11 +27,11 @@ public class Settings
     public static float thrustForce = 1f;
 
     // 燃油初始数量
-    public static float gas = 100f;
+    public static float gas = 1000f;
 
     // 耗油速度
     public static float gasConsume = 5f;
 
     // 燃料箱提供燃油数量
-    public static float gasTank = 20f;
+    public static float gasTank = 200f;
 }
