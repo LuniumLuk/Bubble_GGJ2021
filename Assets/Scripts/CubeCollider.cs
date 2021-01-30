@@ -20,6 +20,7 @@ public class CubeCollider : MonoBehaviour
         {
             GetComponent<Split>().dragging = true;
             attr.mass *= 0.5f;
+            attr.targetmass = attr.mass;
             transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             GameObject newObject = Instantiate(gameObject);
             Debug.LogWarning(contactPoint.normal.ToString());

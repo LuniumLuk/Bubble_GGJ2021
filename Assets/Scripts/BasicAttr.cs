@@ -12,7 +12,7 @@ public class BasicAttr : MonoBehaviour
 
     // bubble质量，用于计算加速度阻力、动量守恒和缩放半径
     public float mass = 10;
-
+    public float targetmass = 0;
     // 速度
     public Vector3 speed;
 
@@ -25,6 +25,7 @@ public class BasicAttr : MonoBehaviour
         if (id >= 0)
             id = sequence++;
         // 将scale设置为质量的平方根
+        targetmass = mass;
         transform.localScale = Vector3.one * Mathf.Sqrt(mass) * Settings.scaleC;
     }
     private void FixedUpdate()
