@@ -40,7 +40,7 @@ public class BasicAttr : MonoBehaviour
         if (id == 0)
         {
             Camera.main.transform.position = currentPos;
-            Camera.main.orthographicSize = Mathf.Sqrt(mass) / 2;
+        //    Camera.main.orthographicSize = Mathf.Sqrt(mass) / 2;
         }
     }
 
