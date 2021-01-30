@@ -38,6 +38,9 @@ public class CubeCollider : MonoBehaviour
             newObject.GetComponent<BasicAttr>().speed += rightDir.normalized * attr.speed.magnitude;
             newObject.GetComponent<BasicAttr>().speed = newObject.GetComponent<BasicAttr>().speed.normalized * originalSpeed;
             GetComponent<Split>().dragging = false;
+                        //分裂声音
+            AudioManager.instance.ruptureAudio.Play();
+
         }
     }
 
