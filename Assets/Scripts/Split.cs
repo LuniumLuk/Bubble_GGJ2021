@@ -12,11 +12,15 @@ public class Split : MonoBehaviour
     // 用于分裂的新object
     GameObject newObject = null;
 
+    // 用于指示方向的三角形，之后可以改成力度条或者其他贴图
+    public Transform pointer = null;
+
     // 用于处理融合的临时gameObject
     private GameObject tempObject = null;
     private void Awake()
     {
         attr = GetComponent<BasicAttr>();
+        pointer.gameObject.SetActive(false);
     }
 
     private void OnMouseOver()
@@ -32,10 +36,15 @@ public class Split : MonoBehaviour
             attr.mass -= 1;
             transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             newObject = Instantiate(gameObject);
-            newObject.transform.position += (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
+            // newObject.transform.position += (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
+
+            pointer.gameObject.SetActive(true);
+            pointer.localPosition = (mousePos - transform.position).normalized;
+
             newObject.transform.localScale = Vector3.one * Settings.scaleC;
             newObject.GetComponent<BasicAttr>().mass = 1;
             newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
+            newObject.GetComponent<SpriteRenderer>().color = new Color(0, 1, 0);
         }
     }
 
@@ -78,7 +87,9 @@ public class Split : MonoBehaviour
                     newObject.transform.localScale = Vector3.one * Mathf.Sqrt(targetMass) * Settings.scaleC;
                 }
                 float distance = Mathf.Sqrt(attr.mass) + Mathf.Sqrt(newObject.GetComponent<BasicAttr>().mass);
-                newObject.transform.position = transform.position + (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
+                newObject.transform.position = transform.position;
+                pointer.localPosition = (mousePos - transform.position).normalized;
+                //newObject.transform.position = transform.position + (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
             }
             else
             {
@@ -89,6 +100,7 @@ public class Split : MonoBehaviour
                 newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
                 dragging = false;
+                pointer.gameObject.SetActive(false);
             }
         }
     }
