@@ -113,8 +113,8 @@ public class Split : MonoBehaviour
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
                 attr.targetmass = attr.mass;
-                attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
-                newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
+                attr.speed += (transform.position - mousePos).normalized * Settings.splitForce * newObject.GetComponent<BasicAttr>().mass;
+                newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce * attr.mass;
                 newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
                 pointer.gameObject.SetActive(false);

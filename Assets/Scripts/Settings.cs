@@ -17,7 +17,7 @@ public class Settings
     public static float minimumMass = 16f;
 
     // 分裂时提供的分离力（固定值）
-    public static float splitForce = 10.0f;
+    public static float splitForce = 0.1f;
 
     // 右键拖动时预览位置系数，即保护距离
     // 在该距离系数加持下，两个物体不会再拖动时或者分裂时因为碰撞体太近而立刻融合
