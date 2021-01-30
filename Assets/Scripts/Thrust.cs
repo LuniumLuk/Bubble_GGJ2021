@@ -16,7 +16,7 @@ public class Thrust : MonoBehaviour
     public Text gasText = null;
 	
     //变化的燃油数量，用于血量条
-	public static float addgas = 0;
+	public static float addgas = 100;
 	
     private void Awake()
     {
@@ -72,6 +72,9 @@ public class Thrust : MonoBehaviour
             Destroy(other.gameObject);
             gas += Settings.gasTank;
             // 更新UI文字
+			if (gas>=100){
+				gas = 100;
+			}
             gasText.text = "Gas: " + gas.ToString();
 			//更新血条数值
 			addgas = gas;
