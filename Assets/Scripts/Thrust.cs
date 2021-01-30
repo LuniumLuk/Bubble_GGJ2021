@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,27 +6,32 @@ using UnityEngine.UI;
 public class Thrust : MonoBehaviour
 {
     BasicAttr attr = null;
+
+    // 喷气特效
     public ParticleSystem emission = null;
 
-    public float thrustForce = 0.001f;
-    public float gas = 100f;
+    // 燃油数量
+    private float gas = 0;
 
     public Text gasText = null;
 
     private void Awake()
     {
         attr = GetComponent<BasicAttr>();
+        gas = Settings.gas;
     }
 
     private void Update()
     {
+        // 鼠标左键点击
         if (Input.GetMouseButton(0) && attr.id == 0 && gas > 0)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
-            attr.spd += (transform.position - mousePos).normalized * thrustForce * Time.deltaTime;
+            attr.speed += (transform.position - mousePos).normalized * Settings.thrustForce * Time.deltaTime;
             emission.transform.localEulerAngles = new Vector3(getAngle(transform.position - mousePos), 90f, 90f);
-            gas -= Time.deltaTime * 10;
+            gas -= Time.deltaTime * Settings.gasConsume;
+            // 更新UI文字
             gasText.text = "Gas: " + gas.ToString();
             emission.Emit(1);
         }
@@ -53,9 +58,11 @@ public class Thrust : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        // 主物体获取到燃料箱
         if(attr.id == 0 && other.gameObject.tag == "gastank") {
             Destroy(other.gameObject);
-            gas += 20;
+            gas += Settings.gasTank;
+            // 更新UI文字
             gasText.text = "Gas: " + gas.ToString();
         }
     }

@@ -1,65 +1,46 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicAttr : MonoBehaviour
 {
+    // 自增序号
     static int sequence = 0;
+
+    // bubble id，其中id为0的是主角色
     public int id = 0;
+
+    // bubble质量，用于计算加速度阻力、动量守恒和缩放半径
     public float mass = 10;
-    public Vector3 spd;
-    public Vector3 acc;
-    public float Ressistance = 0.001f;
-    public float CRessistance = 0.01f;
-    public bool applyRessistance = false;
+
+    // 速度
+    public Vector3 speed;
+
+    // 加速度
+    public Vector3 acceleration;
 
     private void Start()
     {
+        // 自增序号
         if (id >= 0)
             id = sequence++;
-        transform.localScale = Vector3.one * Mathf.Sqrt(mass);
+        // 将scale设置为质量的平方根
+        transform.localScale = Vector3.one * Mathf.Sqrt(mass) * Settings.scaleC;
     }
     private void FixedUpdate()
     {
-        Vector3 RForce = CRessistance * Mathf.Sqrt(mass) * spd.magnitude * spd.magnitude * -spd.normalized;
-        if(applyRessistance)
-            acc = RForce;
-        spd += acc * Time.fixedDeltaTime;
-        transform.position += spd * Time.fixedDeltaTime;
+        Vector3 RForce = Settings.CRessistance * Mathf.Sqrt(mass) * speed.magnitude * speed.magnitude * -speed.normalized;
+        if(Settings.applyRessistance)
+            acceleration = RForce;
+        speed += acceleration * Time.fixedDeltaTime;
+        transform.position += speed * Time.fixedDeltaTime;
         Vector3 currentPos = transform.position;
         currentPos.z = -10;
+        // 调整摄像机位置
         if (id == 0)
         {
             Camera.main.transform.position = currentPos;
             Camera.main.orthographicSize = Mathf.Sqrt(mass) / 2;
-        }
-        //CheckBoundary();
-    }
-
-    void CheckBoundary()
-    {
-        Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
-        Vector3 norm = Vector3.zero;
-        if (pos.x > Screen.width)
-        {
-            norm = Vector3.left;
-        }
-        if (pos.x < 0)
-        {
-            norm = Vector3.right;
-        }
-        if (pos.y < 0)
-        {
-            norm = Vector3.up;
-        }
-        if (pos.y > Screen.height)
-        {
-            norm = Vector3.down;
-        }
-        if (norm != Vector3.zero)
-        {
-            spd = Vector2.Reflect(spd, norm);
-            norm = Vector3.zero;
         }
     }
 
