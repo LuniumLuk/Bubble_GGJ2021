@@ -5,7 +5,7 @@ using UnityEngine;
 public class Settings
 {
     // 阻力系数
-    public static float CRessistance = 0.01f;
+    public static float CRessistance = 0.05f;
 
     // 是否使用阻力
     public static bool applyRessistance = true;
@@ -30,7 +30,7 @@ public class Settings
     public static float gas = 100f;
 
     // 耗油速度
-    public static float gasConsume = 15f;
+    public static float gasConsume = 10f;
 
     // 燃料箱提供燃油数量
     public static float gasTank = 20f;
