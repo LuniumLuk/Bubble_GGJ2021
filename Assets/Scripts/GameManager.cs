@@ -11,7 +11,14 @@ public class GameManager : MonoBehaviour
 
     public Transform canvas = null;
     public GameObject D3 = null;
+    public GameObject D4 = null;
     bool Dialogue3 = false;
+    bool level2Start = false;
+
+    float rate = 20f;
+    public GameObject Wall1 = null;
+    public GameObject Wall2 = null;
+    public GameObject Wall3 = null;
 
     public Text ProgressText;
 
@@ -31,6 +38,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,28 +49,45 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Wall1.transform.Rotate(Vector3.forward * Time.deltaTime * rate);
+        Wall2.transform.Rotate(Vector3.forward * Time.deltaTime * rate);
+        Wall3.transform.Rotate(Vector3.forward * Time.deltaTime * rate);
         //while(timer < countDown)
         //{
-            //timer += Time.deltaTime;
-            //fakeChild.transform.localPosition += Vector3.right * Time.deltaTime * 5f;
+        //timer += Time.deltaTime;
+        //fakeChild.transform.localPosition += Vector3.right * Time.deltaTime * 5f;
         //}
-        if(progress1 == 6)
+        if (progress1 == 6)
         {
             Settings.splitAbility = true;
             if(Dialogue3 == false)
             {
                 Instantiate(D3,canvas);
                 Dialogue3 = true;
+                gameLevel = 2;
             }
         }
+        //GameObject.Find("Main Camera").GetComponent<Camera>().orthographicSize = 1;
 
-        if(gameLevel == 1)
+        if (gameLevel == 1)
         {
             ProgressText.text = progress1.ToString() + " / 6";
         }
-        if (gameLevel == 2)
+        if (gameLevel == 2 && progress2>=1)
         {
-            ProgressText.text = progress2.ToString() + " / 6";
+            if(GameObject.Find("Main Camera").GetComponent<Camera>().orthographicSize < 3)
+            {
+                GameObject.Find("Main Camera").GetComponent<Camera>().orthographicSize += 0.01f; 
+            }
+            else
+            {
+                if (level2Start == false)
+                {
+                    Instantiate(D4, canvas);
+                    level2Start = true;
+                }
+            }
+            ProgressText.text = progress2.ToString() + " / 9";
         }
     }
 }

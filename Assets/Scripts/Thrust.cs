@@ -5,34 +5,35 @@ using UnityEngine.UI;
 
 public class Thrust : MonoBehaviour
 {
-  BasicAttr attr = null;
+    BasicAttr attr = null;
 
-  // 喷气特效
-  public ParticleSystem emission = null;
+    // 喷气特效
+    public ParticleSystem emission = null;
+    public ParticleSystem emission1 = null;
 
-  // 燃油数量
-  private float gas = 100;
+    // 燃油数量
+    private float gas = 100;
 
-  public GameObject plus_UI = null;
+    public GameObject plus_UI = null;
 
-  public Text gasText = null;
+    public Text gasText = null;
 
-  //变化的燃油数量，用于血量条
-  public static float addgas = 100;
+    //变化的燃油数量，用于血量条
+    public static float addgas = 100;
 
-  private void Awake()
-  {
-    attr = GetComponent<BasicAttr>();
-            gas = Settings.gas;
+    private void Awake()
+    {
+        attr = GetComponent<BasicAttr>();
+        gas = Settings.gas;
 
-    //rectTransform = GetComponent<RectTransform>();
-    //width = rectTransform.sizeDelta.x;
-  }
+        //rectTransform = GetComponent<RectTransform>();
+        //width = rectTransform.sizeDelta.x;
+    }
 
-  private void Update()
-  {
-    if (attr.id == 0)
-     {
+    private void Update()
+    {
+        if (attr.id == 0)
+        {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
             transform.localEulerAngles = new Vector3(0, 0, 90f - getAngle(transform.position - mousePos));
@@ -49,53 +50,73 @@ public class Thrust : MonoBehaviour
                 //更新血条数值
                 addgas = gas;
                 emission.Emit(1);
+                emission1.Emit(1);
+                //开始火箭声音
+                if (!AudioManager.instance.rocketAudio.isPlaying)
+                {
+                    AudioManager.instance.rocketAudio.Play();
+                    print("Play");
+                }
+                    //public static float gas1 = 1000f;
+            }
+            else if (!Input.GetMouseButton(0))
+            {
+                //停止火箭声音
+                if (AudioManager.instance.rocketAudio.isPlaying)
+                {
+                    AudioManager.instance.rocketAudio.Stop();
+                    print("Stop");
+                }
+            }           
+        }
+    }
+
+    private float getAngle(Vector3 direction)
+    {
+        if (direction.x > 0)
+        {
+            return -Mathf.Atan(direction.y / direction.x) * 180.0f / Mathf.PI - 180.0f;
+        }
+        else if (direction.x < 0)
+        {
+            return -Mathf.Atan(direction.y / direction.x) * 180.0f / Mathf.PI;
+        }
+        else
+        {
+            if (direction.y > 0)
+                return 90f;
+            else
+                return -90f;
+        }
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        // 主物体获取到燃料箱
+        if (attr.id == 0 && other.gameObject.tag == "gastank")
+        {
+            Vector3 position = other.transform.position + new Vector3(0.5f, 0.5f, 0);
+            GameObject obj = Instantiate(plus_UI, position, Quaternion.identity);
+
+            Destroy(other.gameObject);
+            gas += Settings.gasTank;
+            // 更新UI文字
+            if (gas >= 100)
+            {
+                gas = 100;
+            }
+            gasText.text = "Gas: " + ((int)gas).ToString() + '%';
+            //更新血条数值
+            addgas = gas;
+
+            //获得燃料瓶音效
+            if (!AudioManager.instance.gasAudio.isPlaying)
+            {
+                AudioManager.instance.gasAudio.Play();
             }
 
-            //public static float gas1 = 1000f;
         }
 
     }
-
-  private float getAngle(Vector3 direction)
-  {
-    if (direction.x > 0)
-    {
-      return -Mathf.Atan(direction.y / direction.x) * 180.0f / Mathf.PI - 180.0f;
-    }
-    else if (direction.x < 0)
-    {
-      return -Mathf.Atan(direction.y / direction.x) * 180.0f / Mathf.PI;
-    }
-    else
-    {
-      if (direction.y > 0)
-        return 90f;
-      else
-        return -90f;
-    }
-  }
-
-  public void OnTriggerEnter2D(Collider2D other)
-  {
-    // 主物体获取到燃料箱
-    if (attr.id == 0 && other.gameObject.tag == "gastank")
-    {
-      Vector3 position = other.transform.position + new Vector3(0.5f, 0.5f, 0);
-      GameObject obj = Instantiate(plus_UI, position, Quaternion.identity);
-
-      Destroy(other.gameObject);
-      gas += Settings.gasTank;
-      // 更新UI文字
-      if (gas >= 100)
-      {
-        gas = 100;
-      }
-      gasText.text = "Gas: " + ((int)gas).ToString() + '%';
-      //更新血条数值
-      addgas = gas;
-
-    }
-
-  }
 
 }

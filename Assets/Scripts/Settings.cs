@@ -30,7 +30,7 @@ public class Settings
     public static float gas = 100f;
 
     // 耗油速度
-    public static float gasConsume = 10f;
+    public static float gasConsume = 5f;
 
     // 燃料箱提供燃油数量
     public static float gasTank = 20f;

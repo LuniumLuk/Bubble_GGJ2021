@@ -8,7 +8,8 @@ public class Split : MonoBehaviour
     // 是否在使用鼠标右键拖拽，也可以起到保护bubble不融合的作用
     public bool dragging = false;
     BasicAttr attr = null;
-
+    //follow
+    public static float addmass = 0;
     // 用于分裂的新object
     GameObject newObject = null;
 
@@ -42,6 +43,7 @@ public class Split : MonoBehaviour
             
             attr.targetmass = attr.mass + otherMass;
             tempObject.GetComponent<BasicAttr>().targetmass = 0;
+            AudioManager.instance.combainAudio.Play();
             //attr.mass += otherMass;
             //transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             tempObject = null;
@@ -96,6 +98,8 @@ public class Split : MonoBehaviour
                 // 右键按下
                 if (Input.GetMouseButton(1))
                 {
+                    //先调用一次addmass，不然第一次会出现加载不出来的情况。
+                    addmass = newObject.GetComponent<BasicAttr>().mass;
                     // 显示预览发射体的位置
                     Transform targetTransform = transform;
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -122,8 +126,12 @@ public class Split : MonoBehaviour
                     attr.speed += (transform.position - mousePos).normalized * Settings.splitForce * newObject.GetComponent<BasicAttr>().mass;
                     newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce * attr.mass;
                     newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
+                    addmass = newObject.GetComponent<BasicAttr>().mass;
                     newObject = null;
                     pointer.gameObject.SetActive(false);
+                    //分裂声音
+                    AudioManager.instance.ruptureAudio.Play();
+
                 }
             }
             else if (newObject && !dragging)
@@ -135,8 +143,12 @@ public class Split : MonoBehaviour
                 attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
                 newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
                 newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
+                addmass = newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
                 pointer.gameObject.SetActive(false);
+                //分裂声音
+                AudioManager.instance.ruptureAudio.Play();
+
             }
         }
         
