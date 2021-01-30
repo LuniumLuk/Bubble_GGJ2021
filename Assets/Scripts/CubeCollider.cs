@@ -5,6 +5,7 @@ using UnityEngine;
 public class CubeCollider : MonoBehaviour
 {
     private BasicAttr attr = null;
+    public Sprite spriteChild = null;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class CubeCollider : MonoBehaviour
             attr.targetmass = attr.mass;
             transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             GameObject newObject = Instantiate(gameObject);
+            newObject.GetComponent<SpriteRenderer>().sprite = spriteChild;
             Debug.LogWarning(contactPoint.normal.ToString());
             // 向左矢量
             Vector3 leftDir = new Vector3(contactPoint.normal.y, -contactPoint.normal.x, 0);

@@ -11,7 +11,9 @@ public class Thrust : MonoBehaviour
     public ParticleSystem emission = null;
 
     // 燃油数量
-    private float gas = 0;
+    private float gas = 100;
+
+    public GameObject plus_UI = null;
 
     public Text gasText = null;
 	
@@ -22,9 +24,9 @@ public class Thrust : MonoBehaviour
     {
         attr = GetComponent<BasicAttr>();
         gas = Settings.gas;
-		
-		//rectTransform = GetComponent<RectTransform>();
-		//width = rectTransform.sizeDelta.x;
+        gasText.text = "Gas: " + 100 + '%';
+        //rectTransform = GetComponent<RectTransform>();
+        //width = rectTransform.sizeDelta.x;
     }
 
     private void Update()
@@ -38,7 +40,7 @@ public class Thrust : MonoBehaviour
             emission.transform.localEulerAngles = new Vector3(getAngle(transform.position - mousePos), 90f, 90f);
             gas -= Time.deltaTime * Settings.gasConsume;
             // 更新UI文字
-            gasText.text = "Gas: " + gas.ToString();
+            gasText.text = "Gas: " + ((int)gas).ToString() + '%';
 			//更新血条数值
 			addgas = gas;
             emission.Emit(1);
@@ -69,15 +71,18 @@ public class Thrust : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D other) {
         // 主物体获取到燃料箱
         if(attr.id == 0 && other.gameObject.tag == "gastank") {
+            Vector3 position = other.transform.position + new Vector3(0.5f,0.5f, 0);
+            GameObject obj = Instantiate(plus_UI,position,Quaternion.identity);
+
             Destroy(other.gameObject);
             gas += Settings.gasTank;
             // 更新UI文字
 			if (gas>=100){
 				gas = 100;
 			}
-            gasText.text = "Gas: " + gas.ToString();
-			//更新血条数值
-			addgas = gas;
+            gasText.text = "Gas: " + ((int)gas).ToString() + '%';
+            //更新血条数值
+            addgas = gas;
 			
         }
 		

@@ -41,7 +41,7 @@ public class HealthController : MonoBehaviour {
 			// }
 			// if (Time.time - main_time > 1f) {
 				 currentHealth = Thrust.addgas;
-				 rectTransform.sizeDelta = new Vector2(width*10/maxHealth*currentHealth, rectTransform.sizeDelta.y);
+				 rectTransform.sizeDelta = new Vector2(width/maxHealth*currentHealth, rectTransform.sizeDelta.y);
 			  //长按时执行的动作放这里
 			// }
 			
