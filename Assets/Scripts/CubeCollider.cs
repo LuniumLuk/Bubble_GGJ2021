@@ -14,6 +14,7 @@ public class CubeCollider : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.LogWarning("collide in wall");
         ContactPoint2D contactPoint = other.contacts[0];
         if (other.gameObject.tag == "RotatingWall")
             attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal) + contactPoint.normal * Settings.reflectForce;
@@ -41,7 +42,7 @@ public class CubeCollider : MonoBehaviour
             newObject.GetComponent<BasicAttr>().speed += rightDir.normalized * attr.speed.magnitude;
             newObject.GetComponent<BasicAttr>().speed = newObject.GetComponent<BasicAttr>().speed.normalized * originalSpeed;
             GetComponent<Split>().dragging = false;
-                        //分裂声音
+            //分裂声音
             AudioManager.instance.ruptureAudio.Play();
 
         }

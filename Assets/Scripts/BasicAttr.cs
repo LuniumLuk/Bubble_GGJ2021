@@ -24,6 +24,7 @@ public class BasicAttr : MonoBehaviour
         // 自增序号
         //if (id >= 0)
         //    id = sequence++;
+
         // 将scale设置为质量的平方根
         targetmass = mass;
         transform.localScale = Vector3.one * Mathf.Sqrt(mass) * Settings.scaleC;
