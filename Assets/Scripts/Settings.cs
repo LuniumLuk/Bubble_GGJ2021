@@ -24,7 +24,7 @@ public class Settings
     public static float dragDistanceC = 0.05f;
 
     // 喷力大小
-    public static float thrustForce = 1f;
+    public static float thrustForce = 2f;
 
     // 燃油初始数量
     public static float gas = 100f;

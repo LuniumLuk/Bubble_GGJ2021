@@ -36,7 +36,7 @@ public class Thrust : MonoBehaviour
     {
         if (attr.id == 0)
         {
-            Debug.Log("111");
+            ///Debug.Log("111");
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePos.z = 0;
             transform.localEulerAngles = new Vector3(0, 0, 90f - getAngle(transform.position - mousePos));

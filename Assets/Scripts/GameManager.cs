@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
                 Instantiate(D3,canvas);
                 Dialogue3 = true;
                 gameLevel = 2;
+                ProgressText.text = progress2.ToString() + " / 9";
             }
         }
         //GameObject.Find("Main Camera").GetComponent<Camera>().orthographicSize = 1;

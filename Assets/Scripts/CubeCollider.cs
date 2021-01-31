@@ -18,7 +18,7 @@ public class CubeCollider : MonoBehaviour
         if (other.gameObject.tag == "RotatingWall")
             attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal) + contactPoint.normal * Settings.reflectForce;
         else
-            attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal);
+            attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal) + contactPoint.normal * Settings.reflectForce * 0.1f;
         // 如果障碍物带有spike（尖刺）标签
         if (attr.mass > Settings.minimumMass && other.gameObject.tag == "spike")
         {
