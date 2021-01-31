@@ -17,6 +17,8 @@ public class Split : MonoBehaviour
 
     public float del = 1f;
 
+    public static float addmass = 0f;
+
     public Sprite spriteChild = null;
 
     // 用于处理融合的临时gameObject
@@ -63,7 +65,7 @@ public class Split : MonoBehaviour
 
     private void Update()
     {
-        
+
         // 物体为主物体且不出在拖动状态且右键按下
         if (!tempObject && attr.id == 0 && !dragging && !newObject && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
         {
