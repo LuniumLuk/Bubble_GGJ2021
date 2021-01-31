@@ -8,8 +8,7 @@ public class Split : MonoBehaviour
     // 是否在使用鼠标右键拖拽，也可以起到保护bubble不融合的作用
     public bool dragging = false;
     BasicAttr attr = null;
-    //follow
-    public static float addmass = 0;
+
     // 用于分裂的新object
     GameObject newObject = null;
 
@@ -40,10 +39,9 @@ public class Split : MonoBehaviour
             transform.position = (transform.position * attr.mass + tempObject.transform.position * otherMass) / (attr.mass + otherMass);
             // Destroy(tempObject);
             attr.speed = (attr.speed * attr.mass + otherspeed * otherMass) / (attr.mass + otherMass);
-            
+
             attr.targetmass = attr.mass + otherMass;
             tempObject.GetComponent<BasicAttr>().targetmass = 0;
-            AudioManager.instance.combainAudio.Play();
             //attr.mass += otherMass;
             //transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             tempObject = null;
@@ -55,10 +53,6 @@ public class Split : MonoBehaviour
                 transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
             }
             else if(attr.targetmass == 0) {
-                if (attr.id == -1)
-                {
-                    GameObject.Find("GameManager").GetComponent<GameManager>().AddProgress();
-                }
                 Destroy(gameObject);
             }
         }
@@ -69,89 +63,75 @@ public class Split : MonoBehaviour
 
     private void Update()
     {
-        if(Settings.splitAbility)
+        
+        // 物体为主物体且不出在拖动状态且右键按下
+        if (!tempObject && attr.id == 0 && !dragging && !newObject && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
         {
-            // 物体为主物体且不出在拖动状态且右键按下
-            if (!tempObject && attr.id == 0 && !dragging && !newObject && Input.GetMouseButton(1) && attr.mass > Settings.minimumMass)
+            dragging = true;
+            Transform targetTransform = transform;
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0;
+            float distance = Mathf.Sqrt(attr.mass - 1) + 1;
+            attr.mass -= 1;
+            transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
+            newObject = Instantiate(gameObject);
+            // newObject.transform.position += (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
+
+            pointer.gameObject.SetActive(true);
+            pointer.localPosition = (mousePos - transform.position).normalized;
+
+            newObject.transform.localScale = Vector3.one * Settings.scaleC;
+            newObject.GetComponent<BasicAttr>().mass = 1;
+            newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
+            newObject.GetComponent<SpriteRenderer>().sprite = spriteChild;
+        }
+        // 如果为主物体且正在右键拖动中
+        else if (attr.id == 0 && newObject && dragging)
+        {
+            // 右键按下
+            if (Input.GetMouseButton(1))
             {
-                dragging = true;
+                // 显示预览发射体的位置
                 Transform targetTransform = transform;
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
-                float distance = Mathf.Sqrt(attr.mass - 1) + 1;
-                attr.mass -= 1;
-                transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
-                newObject = Instantiate(gameObject);
-                // newObject.transform.position += (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
-
-                pointer.gameObject.SetActive(true);
+                if (attr.mass - newObject.GetComponent<BasicAttr>().mass > 10f * Time.deltaTime)
+                {
+                    attr.mass -= 5f * Time.deltaTime;
+                    newObject.GetComponent<BasicAttr>().mass += 5f * Time.deltaTime;
+                    float targetMass = newObject.GetComponent<BasicAttr>().mass;
+                    transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
+                    newObject.transform.localScale = Vector3.one * Mathf.Sqrt(targetMass) * Settings.scaleC;
+                }
+                float distance = Mathf.Sqrt(attr.mass) + Mathf.Sqrt(newObject.GetComponent<BasicAttr>().mass);
+                newObject.transform.position = transform.position;
                 pointer.localPosition = (mousePos - transform.position).normalized;
-
-                newObject.transform.localScale = Vector3.one * Settings.scaleC;
-                newObject.GetComponent<BasicAttr>().mass = 1;
-                newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
-                newObject.GetComponent<SpriteRenderer>().sprite = spriteChild;
+                //newObject.transform.position = transform.position + (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
             }
-            // 如果为主物体且正在右键拖动中
-            else if (attr.id == 0 && newObject && dragging)
-            {
-                // 右键按下
-                if (Input.GetMouseButton(1))
-                {
-                    //先调用一次addmass，不然第一次会出现加载不出来的情况。
-                    addmass = newObject.GetComponent<BasicAttr>().mass;
-                    // 显示预览发射体的位置
-                    Transform targetTransform = transform;
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.z = 0;
-                    if (attr.mass - newObject.GetComponent<BasicAttr>().mass > 20f * Time.deltaTime)
-                    {
-                        attr.mass -= 10f * Time.deltaTime;
-                        newObject.GetComponent<BasicAttr>().mass += 10f * Time.deltaTime;
-                        float targetMass = newObject.GetComponent<BasicAttr>().mass;
-                        transform.localScale = Vector3.one * Mathf.Sqrt(attr.mass) * Settings.scaleC;
-                        newObject.transform.localScale = Vector3.one * Mathf.Sqrt(targetMass) * Settings.scaleC;
-                    }
-                    float distance = Mathf.Sqrt(attr.mass) + Mathf.Sqrt(newObject.GetComponent<BasicAttr>().mass);
-                    newObject.transform.position = transform.position;
-                    pointer.localPosition = (mousePos - transform.position).normalized;
-                    //newObject.transform.position = transform.position + (mousePos - transform.position).normalized * distance * Settings.dragDistanceC;
-                }
-                else
-                {
-                    // 发射分裂体
-                    Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mousePos.z = 0;
-                    attr.targetmass = attr.mass;
-                    attr.speed += (transform.position - mousePos).normalized * Settings.splitForce * newObject.GetComponent<BasicAttr>().mass;
-                    newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce * attr.mass;
-                    newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
-                    addmass = newObject.GetComponent<BasicAttr>().mass;
-                    newObject = null;
-                    pointer.gameObject.SetActive(false);
-                    //分裂声音
-                    AudioManager.instance.ruptureAudio.Play();
-
-                }
-            }
-            else if (newObject && !dragging)
+            else
             {
                 // 发射分裂体
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mousePos.z = 0;
+                attr.targetmass = attr.mass;
+                attr.speed += (transform.position - mousePos).normalized * Settings.splitForce * newObject.GetComponent<BasicAttr>().mass;
+                newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce * attr.mass;
+                newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
+                newObject = null;
+                pointer.gameObject.SetActive(false);
+            }
+        }
+        else if(newObject && !dragging) {
+                            // 发射分裂体
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
                 attr.targetmass = attr.mass;
                 attr.speed += (transform.position - mousePos).normalized * Settings.splitForce / attr.mass;
                 newObject.GetComponent<BasicAttr>().speed += (mousePos - transform.position).normalized * Settings.splitForce / newObject.GetComponent<BasicAttr>().mass;
                 newObject.GetComponent<BasicAttr>().targetmass = newObject.GetComponent<BasicAttr>().mass;
-                addmass = newObject.GetComponent<BasicAttr>().mass;
                 newObject = null;
                 pointer.gameObject.SetActive(false);
-                //分裂声音
-                AudioManager.instance.ruptureAudio.Play();
-
-            }
         }
-        
     }
 
     private void OnTriggerEnter2D(Collider2D other)

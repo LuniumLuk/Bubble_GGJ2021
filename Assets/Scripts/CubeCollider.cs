@@ -14,8 +14,10 @@ public class CubeCollider : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
+        Debug.LogWarning("collide in wall");
         ContactPoint2D contactPoint = other.contacts[0];
-        attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal);
+        attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal) + contactPoint.normal * Settings.reflectForce;
+        Debug.DrawLine(contactPoint.point, contactPoint.point + contactPoint.normal * 10f, new Color(1, 0, 0));
         // 如果障碍物带有spike（尖刺）标签
         if (attr.mass > Settings.minimumMass && other.gameObject.tag == "spike")
         {
@@ -38,7 +40,7 @@ public class CubeCollider : MonoBehaviour
             newObject.GetComponent<BasicAttr>().speed += rightDir.normalized * attr.speed.magnitude;
             newObject.GetComponent<BasicAttr>().speed = newObject.GetComponent<BasicAttr>().speed.normalized * originalSpeed;
             GetComponent<Split>().dragging = false;
-                        //分裂声音
+            //分裂声音
             AudioManager.instance.ruptureAudio.Play();
 
         }
