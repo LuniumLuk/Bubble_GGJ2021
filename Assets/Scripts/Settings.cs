@@ -32,6 +32,9 @@ public class Settings
     // 耗油速度
     public static float gasConsume = 5f;
 
+    // 反弹力
+    public static float reflectForce = 0.5f;
+
     // 燃料箱提供燃油数量
     public static float gasTank = 20f;
 

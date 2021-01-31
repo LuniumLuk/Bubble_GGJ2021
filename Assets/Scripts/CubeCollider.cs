@@ -15,7 +15,10 @@ public class CubeCollider : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         ContactPoint2D contactPoint = other.contacts[0];
-        attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal);
+        if (other.gameObject.tag == "RotatingWall")
+            attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal) + contactPoint.normal * Settings.reflectForce;
+        else
+            attr.speed = Vector2.Reflect(attr.speed, contactPoint.normal);
         // 如果障碍物带有spike（尖刺）标签
         if (attr.mass > Settings.minimumMass && other.gameObject.tag == "spike")
         {

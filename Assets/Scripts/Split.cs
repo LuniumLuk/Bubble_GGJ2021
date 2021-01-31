@@ -90,6 +90,7 @@ public class Split : MonoBehaviour
                 newObject.transform.localScale = Vector3.one * Settings.scaleC;
                 newObject.GetComponent<BasicAttr>().mass = 1;
                 newObject.GetComponent<BasicAttr>().speed = Vector3.zero;
+                newObject.GetComponent<BasicAttr>().id = 1;
                 newObject.GetComponent<SpriteRenderer>().sprite = spriteChild;
             }
             // 如果为主物体且正在右键拖动中
